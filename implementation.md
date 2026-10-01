@@ -13,7 +13,7 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 1. Models + admin
 - [x] 2. Orthography helpers + WordNet importer
 - [x] 3. Frequency + ranking
-- [ ] 4. Brown dictionary importer
+- [x] 4. Brown dictionary importer
 - [ ] 5. Curated Peace Corps vocabulary
 - [ ] 6. Scheduler core (learning model)
 - [ ] 7. Practice UI (single page, htmx)
