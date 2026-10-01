@@ -1,0 +1,57 @@
+<div class="streak-band">
+  <span class="streak-count">{{ streak }}</span>
+  <span class="streak-label">{% if streak == 1 %}day{% else %}days{% endif %} in a row</span>
+</div>
+
+<section class="panel-section" aria-labelledby="gate-heading">
+  <h3 id="gate-heading" class="panel-heading">
+    New words
+    <span class="tag {% if gate.open %}tag-good{% else %}tag-again{% endif %}">{% if gate.open %}open{% else %}waiting{% endif %}</span>
+  </h3>
+  <ul class="gate">
+    <li class="{% if gate.pool_ok %}is-ok{% else %}is-blocked{% endif %}">
+      <span class="gate-value">{{ gate.pool }} / {{ gate.cap }}</span>
+      words in learning{% if not gate.pool_ok %}: finish some first{% endif %}
+    </li>
+    <li class="{% if gate.accuracy_ok %}is-ok{% else %}is-blocked{% endif %}">
+      <span class="gate-value">{{ gate.accuracy }}% / {{ gate.threshold }}%</span>
+      accuracy over your last {{ gate.window }} answers
+    </li>
+  </ul>
+</section>
+
+<section class="panel-section" aria-labelledby="words-heading">
+  <h3 id="words-heading" class="panel-heading">Your words</h3>
+  <dl class="figures">
+    <div><dt>waiting</dt><dd>{{ stages.waiting }}</dd></div>
+    <div><dt>learning</dt><dd>{{ stages.learning }}</dd></div>
+    <div><dt>consolidating</dt><dd>{{ stages.consolidating }}</dd></div>
+    <div><dt>known</dt><dd>{{ stages.long_term }}</dd></div>
+  </dl>
+  <dl class="figures">
+    <div><dt>due today</dt><dd>{{ stages.due_today }}</dd></div>
+    <div><dt>due tomorrow</dt><dd>{{ stages.due_tomorrow }}</dd></div>
+    <div><dt>listening</dt><dd>{{ stages.listening }}</dd></div>
+  </dl>
+</section>
+
+<section class="panel-section" aria-labelledby="days-heading">
+  <h3 id="days-heading" class="panel-heading">Last {{ history|length }} days</h3>
+  <ol class="days">
+    {% for day in history %}
+    <li class="{% if forloop.last %}is-today{% endif %}"
+        aria-label="{{ day.day|date:'l j F' }}: {% if day.answers %}{{ day.answers }} answers, {{ day.accuracy }}% correct{% else %}no practice{% endif %}"
+        title="{{ day.day|date:'D j M' }} · {% if day.answers %}{{ day.answers }} answers · {{ day.accuracy }}%{% else %}no practice{% endif %}">
+      <span class="day-bar" aria-hidden="true">
+        <span class="day-missed" style="height: {{ day.missed_height }}%"></span>
+        <span class="day-correct" style="height: {{ day.correct_height }}%"></span>
+      </span>
+      <span class="day-accuracy" aria-hidden="true">{% if day.answers %}{{ day.accuracy }}{% endif %}</span>
+      <span class="day-label" aria-hidden="true">{{ day.day|date:'D'|first }}</span>
+    </li>
+    {% endfor %}
+  </ol>
+  <p class="days-legend">
+    <span class="key key-correct"></span> correct <span class="key key-missed"></span> missed · numbers are % correct
+  </p>
+</section>

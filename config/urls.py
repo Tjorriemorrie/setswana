@@ -10,6 +10,8 @@ urlpatterns = [
     path('card/', views.card, name='card'),
     path('answer/', views.answer, name='answer'),
     path('audio/<int:lexeme_id>/', views.audio, name='audio'),
+    path('stats/', views.stats, name='stats'),
+    path('settings/', views.settings_panel, name='settings'),
     path('admin/', admin.site.urls),
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

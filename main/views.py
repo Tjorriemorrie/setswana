@@ -1,4 +1,4 @@
-"""The single practice page and the htmx partials it loads: the next card and the answer feedback."""
+"""The single practice page and the htmx partials it loads: the next card, the answer feedback and the panel."""
 
 import logging
 
@@ -7,10 +7,12 @@ from django.db.models import Count, Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from main.forms import SettingsForm
 from main.models import Card, Lexeme, Review, Settings
 from main.srs import next_card, start_of_day, submit_answer
+from main.stats import panel_stats
 from main.tts import synthesize
 
 logger = logging.getLogger(__name__)
@@ -104,3 +106,29 @@ def audio(request, lexeme_id):
     url = f'{settings.MEDIA_URL}{path.relative_to(settings.MEDIA_ROOT).as_posix()}'
     logger.info('🔊 Serving audio: lexeme_id=%s, setswana=%r, url=%s', lexeme_id, lexeme.setswana, url)
     return redirect(url)
+
+
+@require_GET
+def stats(request):
+    """Render the stats panel: streak, answers per day, stages, due cards and the new-word gate."""
+    context = panel_stats()
+    logger.info('📊 Rendering stats panel: streak=%s', context['streak'])
+    return render(request, 'main/partials/stats.html', context)
+
+
+@require_http_methods(['GET', 'POST'])
+def settings_panel(request):
+    """Render the settings form, or save it and tell the stats panel to refresh."""
+    instance = Settings.load()
+    if request.method == 'GET':
+        logger.info('⚙️ Rendering settings form')
+        return render(request, 'main/partials/settings.html', {'form': SettingsForm(instance=instance)})
+    form = SettingsForm(request.POST, instance=instance)
+    if not form.is_valid():
+        logger.warning('⚠️ Settings not saved: errors=%s', form.errors.as_json())
+        return render(request, 'main/partials/settings.html', {'form': form})
+    form.save()
+    logger.info('⚙️ Settings saved: changed=%s', form.changed_data)
+    response = render(request, 'main/partials/settings.html', {'form': SettingsForm(instance=instance), 'saved': True})
+    response['HX-Trigger'] = 'settings-saved'
+    return response

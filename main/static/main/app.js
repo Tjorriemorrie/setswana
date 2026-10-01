@@ -1,6 +1,7 @@
 // Keyboard flow for the practice slip: focus follows each htmx swap, Shift+Enter marks an answer as
 // easy, a held-down Enter can't skip past the feedback, and the word's audio plays on listening
-// cards and after each answer (Ctrl+Space or the play button replays it).
+// cards and after each answer (Ctrl+Space or the play button replays it). Ctrl+. opens the stats &
+// settings panel; while it is open, its own forms and focus are left alone.
 (function () {
   'use strict';
 
@@ -27,7 +28,14 @@
     }
   }
 
-  document.addEventListener('htmx:afterSettle', function () {
+  function inPanel(element) {
+    return element && element.closest ? element.closest('#panel') : null;
+  }
+
+  document.addEventListener('htmx:afterSettle', function (event) {
+    if (inPanel(event.target)) {
+      return;
+    }
     focusSlip();
     if (document.querySelector('#practice audio[data-autoplay]')) {
       playWord();
@@ -41,7 +49,17 @@
     }
   });
 
+  document.addEventListener('hidden.bs.offcanvas', focusSlip);
+
   document.addEventListener('keydown', function (event) {
+    if (event.key === '.' && event.ctrlKey) {
+      event.preventDefault();
+      bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('panel')).toggle();
+      return;
+    }
+    if (inPanel(event.target)) {
+      return;
+    }
     if (event.key === ' ' && event.ctrlKey) {
       event.preventDefault();
       playWord();
@@ -68,7 +86,7 @@
   });
 
   document.addEventListener('htmx:responseError', function (event) {
-    var slip = document.getElementById('practice');
+    var slip = inPanel(event.detail.target) ? event.detail.target : document.getElementById('practice');
     slip.innerHTML = '<p class="eyebrow">Error ' + event.detail.xhr.status + '</p>' +
       '<p class="note">The server could not handle that request. Check the runserver console, then reload the page.</p>';
   });

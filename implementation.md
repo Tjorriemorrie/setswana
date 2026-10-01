@@ -18,7 +18,7 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 6. Scheduler core (learning model)
 - [x] 7. Practice UI (single page, htmx)
 - [x] 8. TTS v1
-- [ ] 9. Stats + settings panels
+- [x] 9. Stats + settings panels
 - [ ] 10. Accent improvement (research)
 - [ ] Later, only on request: sentence-structure cards
 
@@ -239,6 +239,17 @@ compared after normalising case and whitespace, and accepted without the diacrit
 - **Done when:**
   - the panel shows the streak, answers and accuracy per day, stage counts, and words due tomorrow;
   - changing the gate settings changes how new words are introduced.
+- **Result:** `main/stats.py` (`panel_stats()`), `main/forms.py` (`SettingsForm`), and the `/stats/` and `/settings/`
+  partials. The offcanvas opens with the top-bar button or Ctrl+. and reloads both partials every time it
+  opens. Decisions:
+  - The panel's header is a strip of the flag's band carrying the streak: consecutive practice days ending
+    today, or yesterday if you haven't practised yet today.
+  - A "New words" block shows the gate: open or waiting, with the learning pool against its cap and recent
+    accuracy against its threshold, so the effect of a settings change is visible straight away.
+  - The 14-day chart is plain HTML/CSS bars (correct in blue, missed in ochre), with no chart library.
+  - Percentages are typed as whole numbers and the consolidation gaps as a comma list. Saving sends an
+    `HX-Trigger: settings-saved` header, which refreshes the stats.
+  - While the panel is open, `app.js` leaves its forms and focus alone. Closing it puts focus back on the card.
 
 ### 10. Accent improvement (research)
 - **Goal:** TTS that sounds like native Setswana.

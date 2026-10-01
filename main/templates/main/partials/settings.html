@@ -1,0 +1,20 @@
+<form class="settings-form" hx-post="{% url 'settings' %}" hx-target="#panel-settings" autocomplete="off">
+  {% for field in form %}
+  <div class="setting{% if field.errors %} has-error{% endif %}">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    <span class="setting-field">
+    <input id="{{ field.id_for_label }}" class="setting-input" name="{{ field.html_name }}" value="{{ field.value|default_if_none:'' }}"
+           {% if field.name == 'consolidation_gaps' %}type="text"{% else %}type="number" min="{{ field.field.min_value }}" max="{{ field.field.max_value }}"{% endif %}
+           aria-describedby="{{ field.id_for_label }}-help" required>
+    {% if field.name in 'accuracy_threshold target_retention' %}<span class="setting-unit" aria-hidden="true">%</span>{% endif %}
+    </span>
+    {% for error in field.errors %}<p class="setting-error">{{ error }}</p>{% endfor %}
+    <p id="{{ field.id_for_label }}-help" class="setting-help">{{ field.help_text }}</p>
+  </div>
+  {% endfor %}
+  <div class="settings-actions">
+    <button type="submit" class="btn-next">Save settings</button>
+    {% if saved %}<span class="settings-status" role="status">Settings saved.</span>
+    {% elif form.errors %}<span class="settings-status is-error" role="status">Not saved: fix the fields marked above.</span>{% endif %}
+  </div>
+</form>

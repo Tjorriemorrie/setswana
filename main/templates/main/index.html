@@ -7,12 +7,16 @@
   <link rel="stylesheet" href="{% static 'vendor/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'main/app.css' %}">
   <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
+  <script src="{% static 'vendor/bootstrap.bundle.min.js' %}" defer></script>
   <script src="{% static 'main/app.js' %}" defer></script>
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   <header class="topbar container">
     <h1 class="brand">Mafoko <span class="brand-gloss">words</span></h1>
     {% include 'main/partials/counters.html' %}
+    <button type="button" class="btn-panel" data-bs-toggle="offcanvas" data-bs-target="#panel" aria-controls="panel">
+      Stats &amp; settings <kbd>Ctrl</kbd>+<kbd>.</kbd>
+    </button>
   </header>
 
   <main class="field">
@@ -22,10 +26,29 @@
     </section>
   </main>
 
+  <aside id="panel" class="offcanvas offcanvas-end panel" tabindex="-1" aria-labelledby="panel-title">
+    <div class="offcanvas-header panel-header">
+      <h2 id="panel-title" class="panel-title">Stats &amp; settings</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close (Esc)"></button>
+    </div>
+    <div class="offcanvas-body panel-body">
+      <div id="panel-stats" hx-get="{% url 'stats' %}" hx-trigger="show.bs.offcanvas from:#panel, settings-saved from:body">
+        <p class="eyebrow">Loading…</p>
+      </div>
+      <section class="panel-section" aria-labelledby="settings-heading">
+        <h3 id="settings-heading" class="panel-heading">Settings</h3>
+        <div id="panel-settings" hx-get="{% url 'settings' %}" hx-trigger="show.bs.offcanvas from:#panel">
+          <p class="eyebrow">Loading…</p>
+        </div>
+      </section>
+    </div>
+  </aside>
+
   <footer class="keys container" aria-label="Keyboard shortcuts">
     <span><kbd>Enter</kbd> check / next</span>
     <span><kbd>Shift</kbd>+<kbd>Enter</kbd> check and mark as easy</span>
     <span><kbd>Ctrl</kbd>+<kbd>Space</kbd> play the word</span>
+    <span><kbd>Ctrl</kbd>+<kbd>.</kbd> stats &amp; settings</span>
     <span>ê ô š are optional</span>
   </footer>
 </body>
