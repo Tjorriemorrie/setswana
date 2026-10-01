@@ -1,0 +1,31 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mafoko</title>
+  <link rel="stylesheet" href="{% static 'vendor/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'main/app.css' %}">
+  <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
+  <script src="{% static 'main/app.js' %}" defer></script>
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  <header class="topbar container">
+    <h1 class="brand">Mafoko <span class="brand-gloss">words</span></h1>
+    {% include 'main/partials/counters.html' %}
+  </header>
+
+  <main class="field">
+    <div class="band" aria-hidden="true"></div>
+    <section id="practice" class="slip" hx-get="{% url 'card' %}" hx-trigger="load" aria-live="polite">
+      <p class="eyebrow">Loading…</p>
+    </section>
+  </main>
+
+  <footer class="keys container" aria-label="Keyboard shortcuts">
+    <span><kbd>Enter</kbd> check / next</span>
+    <span><kbd>Shift</kbd>+<kbd>Enter</kbd> check and mark as easy</span>
+    <span>ê ô š are optional</span>
+  </footer>
+</body>
+</html>

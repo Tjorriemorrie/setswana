@@ -1,0 +1,290 @@
+/* Mafoko: the page is the Botswana flag. A sky-blue field, the black band with white edges across
+   the middle, and the practice slip sitting on the band. Bricolage for English, Atkinson Mono for
+   everything typed in Setswana. */
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('../vendor/fonts/bricolage-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('../vendor/fonts/bricolage-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible Mono';
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../vendor/fonts/atkinson-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible Mono';
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../vendor/fonts/atkinson-mono-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+A720-A7FF;
+}
+
+:root {
+  --sky: #75aadb;        /* flag blue: the field */
+  --sky-ink: #12344f;    /* text on the field */
+  --band: #121417;       /* the black band */
+  --band-edge: #ffffff;  /* its white edges */
+  --paper: #fbfcfd;      /* the slip */
+  --text: #15191d;
+  --muted: #5b6874;
+  --kalahari: #c98a1b;   /* missing letters, near misses */
+  --ochre: #b3432a;      /* wrong letters, misses */
+  --good: #2c6e9e;
+  --display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --mono: 'Atkinson Hyperlegible Mono', ui-monospace, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sky: #0f1d2b;
+    --sky-ink: #a9cbea;
+    --band: #000000;
+    --band-edge: #4f86b8;
+    --paper: #18232e;
+    --text: #e8eef4;
+    --muted: #93a3b3;
+    --kalahari: #e2a943;
+    --ochre: #e0765c;
+    --good: #8cc0ec;
+  }
+}
+
+html, body { min-height: 100%; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--sky);
+  color: var(--text);
+  font-family: var(--display);
+}
+
+/* Top: name and tallies, set straight on the blue field. */
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem 2rem;
+  padding-top: 1.5rem;
+  color: var(--sky-ink);
+}
+.brand {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+.brand-gloss {
+  font-family: var(--mono);
+  font-size: .75rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  opacity: .7;
+}
+.tallies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem 1.5rem;
+  margin: 0;
+}
+.tallies div { display: flex; flex-direction: column-reverse; }
+.tallies dt {
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 400;
+  text-transform: lowercase;
+  opacity: .75;
+}
+.tallies dd {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.tallies small { font-size: .8rem; font-weight: 500; }
+.tally-today { padding-left: 1.5rem; border-left: 2px solid currentColor; }
+
+/* The band: black with white edges, the full width of the page, behind the slip. */
+.field {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+.band {
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 9rem;
+  transform: translateY(-50%);
+  background: var(--band);
+  border-block: .75rem solid var(--band-edge);
+}
+
+/* The practice slip. */
+.slip {
+  position: relative;
+  width: min(34rem, 100%);
+  padding: 2rem 2.25rem 2.25rem;
+  background: var(--paper);
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgb(0 0 0 / .08), 0 18px 40px -18px rgb(0 0 0 / .45);
+}
+.slip > * { animation: settle .18s ease-out both; }
+@keyframes settle { from { opacity: 0; transform: translateY(4px); } }
+
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem .75rem;
+  margin-bottom: .75rem;
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--muted);
+  text-transform: lowercase;
+}
+.meta { color: var(--muted); }
+
+.tag {
+  padding: .1rem .5rem;
+  border-radius: 2px;
+  font-weight: 700;
+  color: var(--paper);
+  background: var(--muted);
+}
+.tag-new, .tag-good { background: var(--good); }
+.tag-easy { background: var(--band); color: var(--band-edge); }
+.tag-hard { background: var(--kalahari); color: #1b1305; }
+.tag-again { background: var(--ochre); }
+
+.prompt {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.75rem, 5vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  overflow-wrap: anywhere;
+}
+
+/* Setswana: always the mono face. */
+.reveal, .answer, .diff {
+  font-family: var(--mono);
+}
+.reveal {
+  margin: 0 0 1rem;
+  font-size: clamp(1.5rem, 4.5vw, 2rem);
+  font-weight: 700;
+  color: var(--good);
+  overflow-wrap: anywhere;
+}
+.reveal-miss { color: var(--ochre); }
+
+.answer {
+  display: block;
+  width: 100%;
+  padding: .35rem 0;
+  font-size: clamp(1.5rem, 4.5vw, 2rem);
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid var(--band);
+  border-radius: 0;
+  caret-color: var(--ochre);
+}
+.answer::placeholder { color: var(--muted); opacity: .5; }
+.answer:focus { outline: none; border-bottom-color: var(--good); }
+@media (prefers-color-scheme: dark) {
+  .answer { border-bottom-color: var(--band-edge); }
+}
+
+.diff {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  overflow-wrap: anywhere;
+}
+.diff-label {
+  display: block;
+  font-size: .7rem;
+  color: var(--muted);
+}
+.dx-extra { color: var(--ochre); text-decoration: line-through 2px; }
+.dx-missing {
+  color: var(--kalahari);
+  font-weight: 700;
+  text-decoration: underline 2px;
+  text-underline-offset: 4px;
+}
+.dx-empty { color: var(--muted); font-style: italic; }
+
+.note { font-size: .95rem; color: var(--muted); }
+
+.btn-next {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+  margin-top: .5rem;
+  padding: .55rem 1rem;
+  font-weight: 700;
+  color: var(--paper);
+  background: var(--band);
+  border: 0;
+  border-radius: 3px;
+}
+.btn-next kbd {
+  font-family: var(--mono);
+  font-size: .7rem;
+  color: var(--band);
+  background: var(--paper);
+}
+.btn-next:focus-visible, .btn-next:focus {
+  outline: 3px solid var(--sky);
+  outline-offset: 3px;
+}
+@media (prefers-color-scheme: dark) {
+  .btn-next { background: var(--band-edge); color: var(--band); }
+  .btn-next kbd { background: var(--band); color: var(--band-edge); }
+}
+
+/* Shortcut legend under the field. */
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  padding-bottom: 1.25rem;
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--sky-ink);
+}
+.keys kbd {
+  font-family: var(--mono);
+  font-size: .7rem;
+  color: var(--sky);
+  background: var(--sky-ink);
+}
+
+@media (max-width: 575.98px) {
+  .slip { padding: 1.5rem 1.25rem 1.75rem; }
+  .tally-today { padding-left: 0; border-left: 0; }
+  .band { height: 7rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slip > * { animation: none; }
+}

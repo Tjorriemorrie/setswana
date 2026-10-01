@@ -1,0 +1,27 @@
+{% if card %}
+{% with lexeme=card.lexeme %}
+<p class="eyebrow">
+  {% if introduce %}<span class="tag tag-new">New word</span>{% else %}{{ card.get_stage_display }}{% endif %}
+  {% if lexeme.pos %}<span class="meta">{{ lexeme.pos }}{% if lexeme.noun_class %} · class {{ lexeme.noun_class }}{% endif %}</span>{% endif %}
+</p>
+<h2 class="prompt">{{ lexeme.english }}</h2>
+{% if introduce %}
+<p class="reveal" lang="tn">{{ lexeme.setswana }}</p>
+{% endif %}
+<form class="answer-form" hx-post="{% url 'answer' %}" hx-target="#practice" hx-sync="this:drop" autocomplete="off">
+  <input type="hidden" name="card" value="{{ card.pk }}">
+  <input type="hidden" name="easy" value="0">
+  <label class="visually-hidden" for="typed">Setswana</label>
+  <input id="typed" class="answer" name="typed" lang="tn" spellcheck="false" autocapitalize="off" autofocus
+         placeholder="{% if introduce %}type it once{% else %}in Setswana{% endif %}">
+</form>
+{% endwith %}
+{% else %}
+<p class="eyebrow">Done for now</p>
+<h2 class="prompt">Go siame — that's everything.</h2>
+<p class="note">
+  {% if next_due %}Next word is due {{ next_due|timeuntil }} from now.{% else %}No reviews are scheduled.{% endif %}
+  New words open up once your recent accuracy is back above the threshold.
+</p>
+<button class="btn-next" hx-get="{% url 'card' %}" hx-target="#practice" autofocus>Check again <kbd>Enter</kbd></button>
+{% endif %}

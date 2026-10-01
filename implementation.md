@@ -16,7 +16,7 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 4. Brown dictionary importer
 - [x] 5. Curated Peace Corps vocabulary
 - [x] 6. Scheduler core (learning model)
-- [ ] 7. Practice UI (single page, htmx)
+- [x] 7. Practice UI (single page, htmx)
 - [ ] 8. TTS v1
 - [ ] 9. Stats + settings panels
 - [ ] 10. Accent improvement (research)
@@ -197,6 +197,14 @@ compared after normalising case and whitespace, and accepted without the diacrit
 - **Done when:**
   - `uv run manage.py runserver` works;
   - you can type answers, see feedback, and have the counters update without a page reload.
+- **Result:** "Mafoko" — the page is styled as the Botswana flag (sky-blue field, black band with white
+  edges, the card on the band) and follows the system's light or dark mode. Fonts (Bricolage Grotesque for
+  English, Atkinson Hyperlegible Mono for Setswana) are vendored in `main/static/vendor/fonts/`, so the app
+  works offline, and pre-commit skips `main/static/vendor/`. Decisions:
+  - New words are shown with their Setswana; you type it once to introduce it.
+  - Easy is chosen when submitting: Shift+Enter instead of Enter. An empty answer counts as a miss.
+  - The diff appears for any answer below Good: struck-through letters were typed wrongly, underlined letters were missing.
+  - `TIME_ZONE` is still `UTC`, so "today" in the counters and due dates rolls over at UTC midnight.
 
 ### 8. TTS v1
 - **Goal:** hear every word.

@@ -1,0 +1,7 @@
+<dl id="counters" class="tallies"{% if oob %} hx-swap-oob="true"{% endif %}>
+  <div><dt>introduced</dt><dd>{{ counters.introduced }}</dd></div>
+  <div><dt>learning</dt><dd>{{ counters.learning }}</dd></div>
+  <div><dt>consolidating</dt><dd>{{ counters.consolidating }}</dd></div>
+  <div><dt>known</dt><dd>{{ counters.known }}</dd></div>
+  <div class="tally-today"><dt>today</dt><dd>{{ counters.answers }}{% if counters.accuracy is not None %} <small>· {{ counters.accuracy }}%</small>{% endif %}</dd></div>
+</dl>

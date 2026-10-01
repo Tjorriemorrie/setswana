@@ -1,0 +1,23 @@
+{% with lexeme=card.lexeme %}
+<p class="eyebrow">
+  {% if introduced %}<span class="tag tag-new">Introduced</span>
+  {% elif result.correct %}<span class="tag tag-{{ rating|lower }}">{% if rating == 'Hard' %}Accepted, nearly{% else %}{{ rating }}{% endif %}</span>
+  {% else %}<span class="tag tag-again">Not quite</span>{% endif %}
+  <span class="meta">
+    {% if card.stage == 'learning' %}learning · {{ card.session_correct }} of {{ required }} in a row
+    {% elif card.stage == 'consolidating' %}consolidating · back {{ card.due|date:'D j M' }}
+    {% else %}known · next review {{ card.due|date:'D j M' }}{% endif %}
+  </span>
+</p>
+<h2 class="prompt">{{ lexeme.english }}</h2>
+<p class="reveal{% if not result.correct %} reveal-miss{% endif %}" lang="tn">{{ lexeme.setswana }}</p>
+{% if result.rating < 3 %}
+<p class="diff" lang="tn">
+  <span class="diff-label">you typed</span>
+  {% if typed %}{% for tag, text in result.diff %}<span class="dx-{{ tag }}">{{ text }}</span>{% endfor %}{% else %}<span class="dx-empty">nothing</span>{% endif %}
+</p>
+{% endif %}
+{% if lexeme.plural %}<p class="note">plural <span lang="tn">{{ lexeme.plural }}</span></p>{% endif %}
+<button class="btn-next" hx-get="{% url 'card' %}" hx-target="#practice" autofocus>Next <kbd>Enter</kbd></button>
+{% endwith %}
+{% include 'main/partials/counters.html' with oob=True %}
