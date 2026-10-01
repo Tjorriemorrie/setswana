@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Downloaded language data (large, re-downloadable — see data/SOURCES.md)
+data/raw/
+data/cache/
+media/
