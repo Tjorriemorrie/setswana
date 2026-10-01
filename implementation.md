@@ -15,7 +15,7 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 3. Frequency + ranking
 - [x] 4. Brown dictionary importer
 - [x] 5. Curated Peace Corps vocabulary
-- [ ] 6. Scheduler core (learning model)
+- [x] 6. Scheduler core (learning model)
 - [ ] 7. Practice UI (single page, htmx)
 - [ ] 8. TTS v1
 - [ ] 9. Stats + settings panels
@@ -175,6 +175,15 @@ compared after normalising case and whitespace, and accepted without the diacrit
 - **Done when:**
   - a word goes learning → consolidating → long-term in the simulation;
   - the gate blocks new words when accuracy is below the threshold or the pool is full.
+- **Result:** `main/srs.py` + `main/answers.py`, tested with `time-machine`. Decisions:
+  - A new word's first showing is an introduction (the UI should show the answer); it moves the card
+    to Learning but doesn't count towards `session_correct`.
+  - In-session gaps are counted in answered cards (`SESSION_GAPS = (1, 5, 10)`). When there is nothing
+    else to do, the Learning card closest to its gap is shown rather than stalling.
+  - "Due today" means due before local midnight tonight; consolidation due dates are local midnights.
+  - FSRS (learning steps off) is fed only the once-a-day answers from Consolidation onwards, so its
+    stability is warm on entering Long-term. Any miss there counts as a lapse.
+  - Typos (edit distance 1) are only forgiven in words of ≥ 4 letters (`go` ≠ `ga`).
 
 ### 7. Practice UI (single page, htmx)
 - **Goal:** daily use in the browser, from the keyboard only.
