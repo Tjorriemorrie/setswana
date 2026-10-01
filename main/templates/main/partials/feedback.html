@@ -4,13 +4,17 @@
   {% elif result.correct %}<span class="tag tag-{{ rating|lower }}">{% if rating == 'Hard' %}Accepted, nearly{% else %}{{ rating }}{% endif %}</span>
   {% else %}<span class="tag tag-again">Not quite</span>{% endif %}
   <span class="meta">
-    {% if card.stage == 'learning' %}learning · {{ card.session_correct }} of {{ required }} in a row
+    {% if card.direction == 'audio_to_tn' %}listening · {% endif %}{% if card.stage == 'learning' %}learning · {{ card.session_correct }} of {{ required }} in a row
     {% elif card.stage == 'consolidating' %}consolidating · back {{ card.due|date:'D j M' }}
     {% else %}known · next review {{ card.due|date:'D j M' }}{% endif %}
   </span>
 </p>
 <h2 class="prompt">{{ lexeme.english }}</h2>
-<p class="reveal{% if not result.correct %} reveal-miss{% endif %}" lang="tn">{{ lexeme.setswana }}</p>
+<p class="reveal{% if not result.correct %} reveal-miss{% endif %}" lang="tn">
+  {{ lexeme.setswana }}
+  <button type="button" class="btn-play" data-play aria-label="Play {{ lexeme.setswana }} again (Ctrl+Space)"><span class="listen-glyph" aria-hidden="true"></span></button>
+</p>
+<audio src="{% url 'audio' lexeme.pk %}" preload="auto" data-autoplay></audio>
 {% if result.rating < 3 %}
 <p class="diff" lang="tn">
   <span class="diff-label">you typed</span>

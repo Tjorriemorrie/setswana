@@ -235,6 +235,80 @@ body {
 
 .note { font-size: .95rem; color: var(--muted); }
 
+/* Audio. The listening prompt is a strip of the flag's band: black with white edges, the play
+   glyph at its left end. The same glyph, small, replays the word next to the revealed answer. */
+.tag-listen { background: var(--band); color: var(--band-edge); }
+
+.listen-glyph {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-block: .5em solid transparent;
+  border-left: .85em solid currentColor;
+}
+.is-playing .listen-glyph {
+  width: .85em;
+  border: 0;
+  border-inline: .28em solid currentColor;
+  animation: pulse .9s ease-in-out infinite alternate;
+}
+@keyframes pulse { to { opacity: .45; } }
+
+.listen-band {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin: 0 0 1.25rem;
+  padding: .9rem 1.25rem;
+  font-size: clamp(1.75rem, 5vw, 2.4rem);
+  color: var(--band-edge);
+  background: var(--band);
+  border: 0;
+  border-block: .3rem solid var(--band-edge);
+  box-shadow: 0 0 0 1px var(--band);
+  border-radius: 0;
+}
+.listen-label {
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.listen-keys { margin-left: auto; font-size: .7rem; }
+.listen-keys kbd {
+  font-family: var(--mono);
+  color: var(--band);
+  background: var(--band-edge);
+}
+.listen-band:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 3px;
+}
+
+.btn-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-left: .5rem;
+  vertical-align: .2em;
+  font-size: .8rem;
+  color: var(--paper);
+  background: var(--band);
+  border: 0;
+  border-radius: 50%;
+}
+.btn-play .listen-glyph { margin-left: .2em; }
+.btn-play.is-playing .listen-glyph { margin-left: 0; }
+.btn-play:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 2px;
+}
+@media (prefers-color-scheme: dark) {
+  .btn-play { background: var(--band-edge); color: var(--band); }
+}
+
 .btn-next {
   display: inline-flex;
   align-items: center;
@@ -287,4 +361,5 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .slip > * { animation: none; }
+  .is-playing .listen-glyph { animation: none; }
 }

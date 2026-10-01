@@ -1,4 +1,4 @@
-"""Build the learning order (`Lexeme.rank`) and the `en_to_tn` cards for ranked lexemes.
+"""Build the learning order (`Lexeme.rank`), the `en_to_tn` cards for ranked lexemes, and missing listening cards.
 
 Rank = the curated Peace Corps words first, in their curated order, then descending corpus frequency
 among the other lexemes with an English gloss. Grammatical particles get no frequency rank: they
@@ -68,12 +68,27 @@ def build_ranking():
     # Cards of lexemes that lost their rank are dropped, unless they have already been practised.
     removed, _ = Card.objects.filter(lexeme__rank__isnull=True, stage=Card.Stage.NEW, reviews__isnull=True).delete()
 
+    # Words already in Consolidation or later also get a listening card (normally created on graduation).
+    with_listening = Card.objects.filter(direction=Card.Direction.AUDIO_TO_TN).values('lexeme_id')
+    graduated = (
+        Card.objects.filter(
+            direction=Card.Direction.EN_TO_TN, stage__in=(Card.Stage.CONSOLIDATING, Card.Stage.LONG_TERM)
+        )
+        .exclude(lexeme_id__in=with_listening)
+        .values_list('lexeme_id', flat=True)
+    )
+    listening = Card.objects.bulk_create(
+        [Card(lexeme_id=lexeme_id, direction=Card.Direction.AUDIO_TO_TN) for lexeme_id in graduated]
+    )
+    logger.info('🎧 Created listening cards: count=%s', len(listening))
+
     counts = {
         'ranked': len(ranks),
         'curated': len(curated),
         'rank_changes': len(to_update),
         'cards_created': len(new_cards),
         'cards_removed': removed,
+        'listening_cards_created': len(listening),
     }
     logger.info('✅ Ranking build completed: %s', ', '.join(f'{k}={v}' for k, v in counts.items()))
     return counts

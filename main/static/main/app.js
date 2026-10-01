@@ -1,5 +1,6 @@
 // Keyboard flow for the practice slip: focus follows each htmx swap, Shift+Enter marks an answer as
-// easy, and a held-down Enter can't skip past the feedback.
+// easy, a held-down Enter can't skip past the feedback, and the word's audio plays on listening
+// cards and after each answer (Ctrl+Space or the play button replays it).
 (function () {
   'use strict';
 
@@ -10,9 +11,42 @@
     }
   }
 
-  document.addEventListener('htmx:afterSettle', focusSlip);
+  function playWord() {
+    var audio = document.querySelector('#practice audio');
+    if (!audio) {
+      return;
+    }
+    var button = document.querySelector('#practice [data-play]');
+    audio.currentTime = 0;
+    audio.play().catch(function () {
+      // Blocked by autoplay rules or no clip for this word: leave the button to try again.
+    });
+    if (button) {
+      audio.onplaying = function () { button.classList.add('is-playing'); };
+      audio.onended = audio.onpause = function () { button.classList.remove('is-playing'); };
+    }
+  }
+
+  document.addEventListener('htmx:afterSettle', function () {
+    focusSlip();
+    if (document.querySelector('#practice audio[data-autoplay]')) {
+      playWord();
+    }
+  });
+
+  document.addEventListener('click', function (event) {
+    if (event.target.closest('#practice [data-play]')) {
+      playWord();
+      focusSlip();
+    }
+  });
 
   document.addEventListener('keydown', function (event) {
+    if (event.key === ' ' && event.ctrlKey) {
+      event.preventDefault();
+      playWord();
+      return;
+    }
     if (event.key !== 'Enter') {
       return;
     }

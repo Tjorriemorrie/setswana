@@ -2,13 +2,16 @@
 
 import logging
 
+from django.conf import settings
 from django.db.models import Count, Q
-from django.shortcuts import get_object_or_404, render
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 
-from main.models import Card, Review, Settings
+from main.models import Card, Lexeme, Review, Settings
 from main.srs import next_card, start_of_day, submit_answer
+from main.tts import synthesize
 
 logger = logging.getLogger(__name__)
 
@@ -49,8 +52,16 @@ def card(request):
         context['next_due'] = upcoming.due if upcoming else None
         logger.info('🏁 Rendering done card: next_due=%s', context['next_due'])
     else:
-        context['introduce'] = chosen.stage == Card.Stage.NEW
-        logger.info('🃏 Rendering card: card=%s, stage=%s, introduce=%s', chosen, chosen.stage, context['introduce'])
+        context['listen'] = chosen.direction == Card.Direction.AUDIO_TO_TN
+        # Listening cards are for words already learned by sight, so they are never introduced.
+        context['introduce'] = chosen.stage == Card.Stage.NEW and not context['listen']
+        logger.info(
+            '🃏 Rendering card: card=%s, stage=%s, introduce=%s, listen=%s',
+            chosen,
+            chosen.stage,
+            context['introduce'],
+            context['listen'],
+        )
     return render(request, 'main/partials/card.html', context)
 
 
@@ -58,7 +69,7 @@ def card(request):
 def answer(request):
     """Grade a typed answer and render the feedback, updating the counters out of band."""
     chosen = get_object_or_404(Card.objects.select_related('lexeme'), pk=request.POST.get('card'))
-    introduced = chosen.stage == Card.Stage.NEW
+    introduced = chosen.stage == Card.Stage.NEW and chosen.direction == Card.Direction.EN_TO_TN
     typed = request.POST.get('typed', '')
     easy = request.POST.get('easy') == '1'
     result = submit_answer(chosen, typed, easy=easy)
@@ -79,3 +90,17 @@ def answer(request):
         introduced,
     )
     return render(request, 'main/partials/feedback.html', context)
+
+
+@require_GET
+def audio(request, lexeme_id):
+    """Redirect to the lexeme's TTS clip, generating it on first request."""
+    lexeme = get_object_or_404(Lexeme, pk=lexeme_id)
+    try:
+        path = synthesize(lexeme.setswana)
+    except ValueError as exc:
+        logger.warning('⚠️ No audio for lexeme: lexeme_id=%s, setswana=%r, error=%s', lexeme_id, lexeme.setswana, exc)
+        raise Http404('No audio for this word') from exc
+    url = f'{settings.MEDIA_URL}{path.relative_to(settings.MEDIA_ROOT).as_posix()}'
+    logger.info('🔊 Serving audio: lexeme_id=%s, setswana=%r, url=%s', lexeme_id, lexeme.setswana, url)
+    return redirect(url)

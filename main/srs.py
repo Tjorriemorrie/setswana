@@ -138,8 +138,11 @@ def grade(card, rating, now, settings):
     before = card.stage
     card.reps += 1
     if card.stage == Card.Stage.NEW:
-        # The first showing introduces the word; recall only counts from the next showing.
-        card.stage, card.session_correct, card.introduced_at = Card.Stage.LEARNING, 0, now
+        # The first showing introduces the word; recall only counts from the next showing. A listening
+        # card's word is already known by sight, so its first answer is a real recall.
+        listening = card.direction == Card.Direction.AUDIO_TO_TN
+        card.stage, card.introduced_at = Card.Stage.LEARNING, now
+        card.session_correct = int(listening and correct)
     elif card.stage == Card.Stage.LEARNING:
         card.session_correct = card.session_correct + 1 if correct else 0
         if card.session_correct >= settings.session_correct_required:
@@ -181,6 +184,10 @@ def submit_answer(card, typed, easy=False, now=None):
         grade(card, result.rating, now, settings)
         card.save()
         Review.objects.create(card=card, typed=typed, correct=result.correct, rating=result.rating)
+        if card.direction == Card.Direction.EN_TO_TN and card.stage in (Card.Stage.CONSOLIDATING, Card.Stage.LONG_TERM):
+            _, created = Card.objects.get_or_create(lexeme=card.lexeme, direction=Card.Direction.AUDIO_TO_TN)
+            if created:
+                logger.info('🎧 Created listening card: lexeme=%s', card.lexeme)
     logger.info(
         '✅ Answer submitted: card=%s, correct=%s, rating=%s, stage=%s', card, result.correct, result.rating, card.stage
     )

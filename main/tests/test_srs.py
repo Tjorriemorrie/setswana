@@ -49,7 +49,7 @@ def test_word_goes_learning_consolidating_long_term():
     assert card.stage == Card.Stage.CONSOLIDATING
     assert card.due == datetime(2026, 3, 3, tzinfo=UTC)
     with time_machine.travel(t + timedelta(hours=1), tick=False):
-        assert next_card() is None  # nothing due, no new words left
+        assert next_card().direction == Card.Direction.AUDIO_TO_TN  # graduating opened its listening card
 
     for day in (1, 2, 4):  # consolidation gaps 1, 1, 2
         answer(DAY0 + timedelta(days=day))

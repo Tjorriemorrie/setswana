@@ -17,7 +17,7 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 5. Curated Peace Corps vocabulary
 - [x] 6. Scheduler core (learning model)
 - [x] 7. Practice UI (single page, htmx)
-- [ ] 8. TTS v1
+- [x] 8. TTS v1
 - [ ] 9. Stats + settings panels
 - [ ] 10. Accent improvement (research)
 - [ ] Later, only on request: sentence-structure cards
@@ -97,10 +97,11 @@ compared after normalising case and whitespace, and accepted without the diacrit
 
 ### TTS
 
-- **v1:** Meta MMS-TTS `facebook/mms-tts-tsn` (a VITS model that runs locally on the CPU) through
-  `transformers` + `torch`. `main/tts.py` provides `synthesize(text) -> Path`, cached by text hash
-  in `media/tts/` and indexed in `AudioClip`. Files are served from `MEDIA_URL` in DEBUG.
-  `pregenerate_tts --top N` warms the cache. Licence is CC BY-NC, which is fine for personal use.
+- **v1:** UBC-NLP Simba-TTS `UBC-NLP/Simba-TTS-tsn` (a VITS model that runs locally on the CPU) through
+  `transformers` + `torch`. Meta's `facebook/mms-tts-tsn`, the original plan, isn't published on Hugging Face.
+  `main/tts.py` provides `synthesize(text) -> Path`, cached by text hash in `media/tts/` and indexed in
+  `AudioClip`. Files are served from `MEDIA_URL` in DEBUG. `pregenerate_tts --top N` warms the cache.
+  Licence is CC BY 4.0.
 - **Accent (research):** compare against the native Peace Corps recordings
   (`data/raw/peace_corps/audio/`). Options: a different speaker or voice, or fine-tuning on the
   NCHLT Setswana speech corpus (SADiLaR, not downloaded yet).
@@ -219,6 +220,17 @@ compared after normalising case and whitespace, and accepted without the diacrit
   - audio plays after each answer;
   - cached files are reused;
   - listening cards appear in sessions.
+- **Result:** `main/tts.py` (`synthesize()`, `pregenerate()`), served through `/audio/<lexeme_id>/`, which
+  generates the clip on first request and redirects to `MEDIA_URL`, so feedback renders without waiting for
+  the model. Decisions:
+  - Clips are keyed on the normalised (lowercased) text and generated with a fixed seed, since VITS samples
+    durations randomly.
+  - The model's vocabulary lacks ê/ô/š and silently drops them, so they are spoken as e/o/sh.
+  - A listening card is created when an `en_to_tn` card reaches Consolidation (`build_ranking` backfills any
+    missing ones). It enters through the new-word gate, but it isn't an introduction: the answer is hidden and
+    the first answer already counts towards `session_correct`.
+  - The listening prompt is a strip of the flag's band with a play glyph. Ctrl+Space replays the word on any
+    card, and audio auto-plays on listening cards and after every answer.
 
 ### 9. Stats + settings panels
 - **Goal:** visibility and tuning.
@@ -231,7 +243,7 @@ compared after normalising case and whitespace, and accepted without the diacrit
 ### 10. Accent improvement (research)
 - **Goal:** TTS that sounds like native Setswana.
 - **Work:**
-  1. Listen to the MMS output next to the Peace Corps audio for the same words.
+  1. Listen to the Simba-TTS output next to the Peace Corps audio for the same words.
   2. Write up the findings.
   3. Decide between a voice swap, fine-tuning on the NCHLT speech corpus, or keeping v1.
 - **Done when:** the decision is recorded here, plus a follow-up step if it's needed.
