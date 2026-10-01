@@ -12,7 +12,7 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 0. Scope rules, gitignore, this guide
 - [x] 1. Models + admin
 - [x] 2. Orthography helpers + WordNet importer
-- [ ] 3. Frequency + ranking
+- [x] 3. Frequency + ranking
 - [ ] 4. Brown dictionary importer
 - [ ] 5. Curated Peace Corps vocabulary
 - [ ] 6. Scheduler core (learning model)
