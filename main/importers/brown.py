@@ -13,6 +13,7 @@ from django.conf import settings
 from django.db import transaction
 
 from main.importers.frequency import default_paths as frequency_paths
+from main.importers.peace_corps import SOURCE as PEACE_CORPS
 from main.models import Lexeme
 from main.orthography import modern_candidates, strip_diacritics
 
@@ -248,7 +249,9 @@ def import_brown(text_path=None, freq_path=None):
         claimed.add(lexeme.pk)
         # Matches with another source's lexeme; stable across re-runs, unlike matches with Brown's own.
         matched += lexeme.sources != [SOURCE]
-        # Brown's glosses are plainer than WordNet's, so Brown owns the gloss of every lexeme it matches.
+        # Brown's glosses are plainer than WordNet's, so Brown owns the gloss of every lexeme it matches,
+        # except the curated Peace Corps glosses.
+        gloss = lexeme.english if PEACE_CORPS in lexeme.sources else gloss
         if lexeme.english != gloss or SOURCE not in lexeme.sources:
             lexeme.english = gloss
             lexeme.sources = lexeme.sources if SOURCE in lexeme.sources else [*lexeme.sources, SOURCE]

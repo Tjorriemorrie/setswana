@@ -1,0 +1,367 @@
+# Survival vocabulary from Peace Corps Botswana, "An Introduction to the Setswana Language"
+# (data/raw/peace_corps/bw_setswana_language_lessons.pdf), in lesson order. These words are ranked
+# first, in the order listed here (see `import_peace_corps` and `build_ranking`).
+#
+# Spelling follows the PDF (ê/ô included; answers are accepted without them). The PDF's English
+# column is often shifted one row against the Setswana, so pairs were realigned by meaning.
+# Particles (le, ke, a, go, ...) are left out: they belong to the later sentence phase.
+#
+# pos: n, v, a (adjective, also numbers), r (adverb), pron, conj, interj, phrase (a fixed expression).
+# Parts of speech follow the existing lexemes where they differ (nngwe is a noun in Brown).
+# Optional `plural` is stored on the lexeme. Questions are listed without the question mark.
+
+lessons:
+  - lesson: 2
+    title: Greetings
+    words:
+      - {setswana: dumêla, pos: interj, english: "hello; good day (to one person)"}
+      - {setswana: dumêlang, pos: interj, english: "hello; good day (to a group)"}
+      - {setswana: rra, pos: n, english: "sir; father"}
+      - {setswana: mma, pos: n, english: "madam; mother"}
+      - {setswana: borra, pos: n, english: "gentlemen; sirs"}
+      - {setswana: bomma, pos: n, english: "ladies; madams"}
+      - {setswana: o tsogile jang, pos: phrase, english: "how are you? (formal, lit. how did you rise?)"}
+      - {setswana: ke tsogile sentle, pos: phrase, english: "I am fine (lit. I rose well)"}
+      - {setswana: sentle, pos: a, english: "well; nicely"}
+      - {setswana: le kae, pos: phrase, english: "how are you? (informal)"}
+      - {setswana: re teng, pos: phrase, english: "we are fine (informal reply)"}
+      - {setswana: re a leboga, pos: phrase, english: "thank you (lit. we thank)"}
+
+  - lesson: 3
+    title: Introducing self / someone
+    words:
+      - {setswana: leina, pos: n, english: "name"}
+      - {setswana: sefane, pos: n, english: "surname"}
+      - {setswana: leina la gago ke mang, pos: phrase, english: "what is your name?"}
+      - {setswana: mang, pos: pron, english: "who"}
+      - {setswana: tswa, pos: v, english: "come from; go out"}
+      - {setswana: kae, pos: r, english: "where"}
+      - {setswana: o tswa kae, pos: phrase, english: "where are you from?"}
+      - {setswana: moithaopi, pos: n, english: "volunteer"}
+
+  - lesson: 4
+    title: Leave-taking
+    words:
+      - {setswana: go siame, pos: phrase, english: "goodbye; it's fine"}
+      - {setswana: ke tla go bôna, pos: phrase, english: "see you"}
+      - {setswana: tlhôla sentle, pos: phrase, english: "have a good day"}
+      - {setswana: robala sentle, pos: phrase, english: "good night (lit. sleep well)"}
+
+  - lesson: 5
+    title: Verbs
+    words:
+      - {setswana: kgôna, pos: v, english: "be able"}
+      - {setswana: gakolola, pos: v, english: "advise; remind"}
+      - {setswana: tshaba, pos: v, english: "be afraid of; run away"}
+      - {setswana: araba, pos: v, english: "answer"}
+      - {setswana: gôrôga, pos: v, english: "arrive"}
+      - {setswana: botsa, pos: v, english: "ask"}
+      - {setswana: kopa, pos: v, english: "ask for; request (polite)"}
+      - {setswana: tsamaya, pos: v, english: "go away; travel; walk"}
+      - {setswana: nna, pos: v, english: "sit; live; stay"}
+      - {setswana: simolola, pos: v, english: "begin; start"}
+      - {setswana: dumêla, pos: v, english: "believe; agree"}
+      - {setswana: bedisa, pos: v, english: "boil"}
+      - {setswana: adima, pos: v, english: "borrow"}
+      - {setswana: tlisa, pos: v, english: "bring"}
+      - {setswana: tshuba, pos: v, english: "burn"}
+      - {setswana: fitlha, pos: v, english: "bury; hide; arrive"}
+      - {setswana: rêka, pos: v, english: "buy"}
+      - {setswana: bitsa, pos: v, english: "call"}
+      - {setswana: kuka, pos: v, english: "lift; carry"}
+      - {setswana: palama, pos: v, english: "climb; board (a vehicle)"}
+      - {setswana: tswala, pos: v, english: "close (a door)"}
+      - {setswana: tla, pos: v, english: "come"}
+      - {setswana: tsêna, pos: v, english: "enter; come in"}
+      - {setswana: apaya, pos: v, english: "cook"}
+      - {setswana: lela, pos: v, english: "cry; weep"}
+      - {setswana: bina, pos: v, english: "dance"}
+      - {setswana: diêga, pos: v, english: "delay; be late"}
+      - {setswana: senya, pos: v, english: "destroy; spoil"}
+      - {setswana: dira, pos: v, english: "do; make"}
+      - {setswana: nwa, pos: v, english: "drink"}
+      - {setswana: phakêla, pos: v, english: "be early"}
+      - {setswana: ja, pos: v, english: "eat"}
+      - {setswana: tlhalosa, pos: v, english: "explain"}
+      - {setswana: utlwa, pos: v, english: "feel; hear; taste"}
+      - {setswana: fetsa, pos: v, english: "finish"}
+      - {setswana: fitlhêla, pos: v, english: "find"}
+      - {setswana: baakanya, pos: v, english: "fix; prepare"}
+      - {setswana: itshwarêla, pos: v, english: "forgive"}
+      - {setswana: bôna, pos: v, english: "see"}
+      - {setswana: tsoga, pos: v, english: "wake up; get up"}
+      - {setswana: fa, pos: v, english: "give"}
+      - {setswana: ya, pos: v, english: "go"}
+      - {setswana: itumêla, pos: v, english: "be happy"}
+      - {setswana: thusa, pos: v, english: "help"}
+      - {setswana: tshwara, pos: v, english: "hold; catch"}
+      # The PDF glosses bolaya as "injure"; it means "kill".
+      - {setswana: bolaya, pos: v, english: "kill"}
+      - {setswana: boloka, pos: v, english: "keep; save"}
+      - {setswana: siama, pos: v, english: "be good; be kind; be right"}
+      - {setswana: itse, pos: v, english: "know"}
+      - {setswana: tshêga, pos: v, english: "laugh"}
+      - {setswana: ithuta, pos: v, english: "learn; study"}
+      - {setswana: reetsa, pos: v, english: "listen"}
+      - {setswana: rata, pos: v, english: "like; love"}
+      - {setswana: tlhôka, pos: v, english: "need; lack"}
+      - {setswana: bula, pos: v, english: "open"}
+      - {setswana: feta, pos: v, english: "pass"}
+      - {setswana: duêla, pos: v, english: "pay"}
+      - {setswana: sêla, pos: v, english: "pick up"}
+      - {setswana: baya, pos: v, english: "put; place"}
+      - {setswana: gana, pos: v, english: "refuse"}
+      - {setswana: boa, pos: v, english: "return; come back"}
+      - {setswana: raya, pos: v, english: "say; mean"}
+      - {setswana: rekisa, pos: v, english: "sell"}
+      - {setswana: lwala, pos: v, english: "be sick"}
+      - {setswana: robala, pos: v, english: "sleep"}
+      - {setswana: gôga, pos: v, english: "pull; smoke"}
+      - {setswana: bua, pos: v, english: "speak; talk"}
+      - {setswana: lala, pos: v, english: "spend the night"}
+      - {setswana: sala, pos: v, english: "stay behind; remain"}
+      - {setswana: tsaya, pos: v, english: "take"}
+      - {setswana: ruta, pos: v, english: "teach"}
+      - {setswana: bolêla, pos: v, english: "tell"}
+      - {setswana: lapa, pos: v, english: "be tired"}
+      - {setswana: leka, pos: v, english: "try"}
+      - {setswana: tlhaloganya, pos: v, english: "understand"}
+      - {setswana: dirisa, pos: v, english: "use"}
+      - {setswana: êta, pos: v, english: "visit"}
+      - {setswana: batla, pos: v, english: "want; look for"}
+      - {setswana: tlhatswa, pos: v, english: "wash (clothes, dishes)"}
+      - {setswana: tlhapa, pos: v, english: "bathe; wash oneself"}
+      - {setswana: leba, pos: v, english: "look at; watch"}
+      - {setswana: bêrêka, pos: v, english: "work"}
+      - {setswana: kwala, pos: v, english: "write"}
+
+  - lesson: 6
+    title: Useful expressions
+    words:
+      - {setswana: ke lapile, pos: phrase, english: "I am tired"}
+      - {setswana: otsêla, pos: v, english: "be sleepy; doze"}
+      - {setswana: tlala, pos: n, english: "hunger"}
+      - {setswana: lenyora, pos: n, english: "thirst"}
+      - {setswana: o ya kae, pos: phrase, english: "where are you going?"}
+      - {setswana: ikhutsa, pos: v, english: "rest"}
+      - {setswana: nako, pos: n, english: "time"}
+      - {setswana: ga ke tlhaloganye, pos: phrase, english: "I don't understand"}
+      - {setswana: ka bonya, pos: r, english: "slowly"}
+      - {setswana: ka bonako, pos: r, english: "quickly"}
+      - {setswana: gape, pos: r, english: "again; also"}
+      - {setswana: intshwarêle, pos: interj, english: "excuse me; sorry"}
+      - {setswana: ee, pos: interj, english: "yes"}
+      - {setswana: nnyaa, pos: interj, english: "no"}
+      - {setswana: mathata, pos: n, english: "problems; trouble"}
+      - {setswana: potso, pos: n, english: "question", plural: dipotso}
+      - {setswana: dumêdisa, pos: v, english: "greet"}
+      - {setswana: tswêê-tswêê, pos: interj, english: "please"}
+      - {setswana: ke itumetse, pos: phrase, english: "thank you (lit. I am happy)"}
+
+  - lesson: 7
+    title: Nouns (household)
+    words:
+      - {setswana: tafole, pos: n, english: "table"}
+      - {setswana: setilô, pos: n, english: "chair"}
+      - {setswana: sejana, pos: n, english: "plate; dish"}
+      - {setswana: kopi, pos: n, english: "cup"}
+      - {setswana: leswana, pos: n, english: "spoon"}
+      - {setswana: thipa, pos: n, english: "knife"}
+      - {setswana: lefeêlô, pos: n, english: "broom"}
+      - {setswana: bolao, pos: n, english: "bed"}
+      - {setswana: kobô, pos: n, english: "blanket"}
+      - {setswana: diaparô, pos: n, english: "clothes"}
+      - {setswana: borokgwe, pos: n, english: "trousers; pants"}
+      - {setswana: ditlhako, pos: n, english: "shoes"}
+      - {setswana: pensele, pos: n, english: "pencil"}
+      - {setswana: buka, pos: n, english: "book"}
+      - {setswana: pênê, pos: n, english: "pen"}
+      - {setswana: fensetere, pos: n, english: "window"}
+      - {setswana: lebati, pos: n, english: "door"}
+
+  - lesson: 8
+    title: Pronouns
+    words:
+      - {setswana: nna, pos: pron, english: "I; me"}
+      - {setswana: wêna, pos: pron, english: "you (one person)"}
+      - {setswana: ênê, pos: pron, english: "he; she; him; her"}
+      - {setswana: rona, pos: pron, english: "we; us"}
+      - {setswana: lona, pos: pron, english: "you (plural)"}
+      - {setswana: bônê, pos: pron, english: "they; them"}
+
+  - lesson: 9
+    title: Connecting words
+    words:
+      - {setswana: mme, pos: conj, english: "but"}
+      - {setswana: kgotsa, pos: conj, english: "or"}
+      - {setswana: jaaka, pos: conj, english: "as; like"}
+      - {setswana: ka jalo, pos: conj, english: "therefore"}
+      - {setswana: ka gore, pos: conj, english: "because"}
+
+  - lesson: 11
+    title: To be and to have
+    words:
+      - {setswana: bala, pos: v, english: "read; count"}
+      - {setswana: na le, pos: v, english: "have"}
+
+  - lesson: 12
+    title: Questions and commands
+    words:
+      - {setswana: eng, pos: pron, english: "what"}
+      - {setswana: leng, pos: r, english: "when"}
+      - {setswana: jang, pos: r, english: "how"}
+      - {setswana: efe, pos: pron, english: "which one"}
+      - {setswana: ka go reng, pos: phrase, english: "why?"}
+      - {setswana: êma, pos: v, english: "stand"}
+      - {setswana: didimala, pos: v, english: "be quiet"}
+      - {setswana: tla kwano, pos: phrase, english: "come here"}
+      - {setswana: nna fatshe, pos: phrase, english: "sit down"}
+      - {setswana: pele, pos: r, english: "in front; ahead; first"}
+      - {setswana: morago, pos: r, english: "behind; back; afterwards"}
+
+  - lesson: 13
+    title: Expressing needs
+    words:
+      - {setswana: kêrêsê, pos: n, english: "candle"}
+      - {setswana: madi, pos: n, english: "money; blood"}
+      - {setswana: tlhogo, pos: n, english: "head"}
+      - {setswana: opa, pos: v, english: "ache; hurt; hit"}
+      - {setswana: ga ke itse, pos: phrase, english: "I don't know"}
+
+  - lesson: 14
+    title: Food
+    words:
+      - {setswana: dijô, pos: n, english: "food"}
+      - {setswana: mabêlê, pos: n, english: "sorghum"}
+      - {setswana: phaletshê, pos: n, english: "maize meal; mealie-meal"}
+      - {setswana: sukiri, pos: n, english: "sugar"}
+      - {setswana: letswai, pos: n, english: "salt"}
+      - {setswana: metsi, pos: n, english: "water"}
+      - {setswana: mashi, pos: n, english: "milk"}
+      - {setswana: ditamati, pos: n, english: "tomatoes"}
+      - {setswana: ditapole, pos: n, english: "potatoes"}
+      - {setswana: mae, pos: n, english: "eggs"}
+      - {setswana: borotho, pos: n, english: "bread"}
+      - {setswana: kofi, pos: n, english: "coffee"}
+      - {setswana: tee, pos: n, english: "tea"}
+      - {setswana: motôgô, pos: n, english: "soft porridge"}
+      - {setswana: anyense, pos: n, english: "onion"}
+      - {setswana: namunê, pos: n, english: "orange (fruit)"}
+      - {setswana: apole, pos: n, english: "apple"}
+      - {setswana: manôkô, pos: n, english: "peanuts"}
+      - {setswana: dinawa, pos: n, english: "beans"}
+
+  - lesson: 15
+    title: Family
+    words:
+      - {setswana: ntatemogolo, pos: n, english: "grandfather"}
+      - {setswana: nkuku, pos: n, english: "grandmother"}
+      - {setswana: ntate, pos: n, english: "father"}
+      - {setswana: mmê, pos: n, english: "mother"}
+      - {setswana: kgaitsadi, pos: n, english: "sibling of the opposite sex (sister of a man, brother of a woman)"}
+      - {setswana: nkgonne, pos: n, english: "my older sibling"}
+      - {setswana: nnake, pos: n, english: "my younger sibling"}
+      - {setswana: rangwane, pos: n, english: "uncle (father's younger brother)"}
+      - {setswana: malome, pos: n, english: "uncle (mother's brother)"}
+      - {setswana: rakgadi, pos: n, english: "aunt (father's sister)"}
+      - {setswana: mmangwane, pos: n, english: "aunt (mother's younger sister)"}
+      - {setswana: ntsalake, pos: n, english: "my cousin"}
+      - {setswana: batsadi, pos: n, english: "parents"}
+      - {setswana: ngwana, pos: n, english: "child", plural: bana}
+      - {setswana: lelapa, pos: n, english: "family; home"}
+
+  - lesson: 16
+    title: Time
+    words:
+      - {setswana: gompieno, pos: r, english: "today"}
+      - {setswana: maabane, pos: r, english: "yesterday"}
+      - {setswana: kamoso, pos: r, english: "tomorrow"}
+      - {setswana: maloba, pos: r, english: "a few days ago; the other day"}
+      - {setswana: beke, pos: n, english: "week"}
+      - {setswana: kgwedi, pos: n, english: "month; moon"}
+      - {setswana: ngwaga, pos: n, english: "year"}
+      - {setswana: ngogola, pos: r, english: "last year"}
+      - {setswana: jaanong, pos: r, english: "now"}
+      - {setswana: kgantele, pos: r, english: "later on; earlier on (today)"}
+      - {setswana: bosigo, pos: n, english: "night"}
+      - {setswana: phakêla, pos: n, english: "morning (early)"}
+      - {setswana: motshegare, pos: n, english: "midday; afternoon"}
+      - {setswana: maitseboa, pos: n, english: "evening"}
+
+  - lesson: 17
+    title: Daily activities
+    words:
+      - {setswana: selo, pos: n, english: "thing", plural: dilo}
+      - {setswana: moeng, pos: n, english: "visitor; guest", plural: baeng}
+      - {setswana: lepodisi, pos: n, english: "police officer", plural: mapodisi}
+
+  - lesson: 18
+    title: Places
+    words:
+      - {setswana: ntlo, pos: n, english: "house"}
+      - {setswana: tlelase, pos: n, english: "classroom"}
+      - {setswana: thoelêtê, pos: n, english: "toilet"}
+      - {setswana: kitsi, pos: n, english: "kitchen"}
+      - {setswana: sekolo, pos: n, english: "school"}
+      - {setswana: sepatela, pos: n, english: "hospital"}
+      - {setswana: kokelwana, pos: n, english: "clinic"}
+      - {setswana: lebênkêle, pos: n, english: "shop; store"}
+      - {setswana: poso, pos: n, english: "post office"}
+      - {setswana: noka, pos: n, english: "river"}
+      - {setswana: tshimo, pos: n, english: "field (ploughed)"}
+      - {setswana: kêrêkê, pos: n, english: "church"}
+      - {setswana: banka, pos: n, english: "bank"}
+      - {setswana: kgotla, pos: n, english: "customary court; village meeting place"}
+
+  - lesson: 20
+    title: Asking for prices
+    words:
+      - {setswana: kgetse, pos: n, english: "bag; sack"}
+      - {setswana: bokae, pos: r, english: "how much; how many"}
+      - {setswana: ke bokae, pos: phrase, english: "how much is it?"}
+      - {setswana: thebe, pos: n, english: "thebe (cent); shield"}
+      - {setswana: gotlhe, pos: r, english: "all; altogether"}
+
+  - lesson: 21
+    title: Weather
+    words:
+      - {setswana: pula, pos: n, english: "rain"}
+      - {setswana: serame, pos: n, english: "cold (weather)"}
+      - {setswana: mogote, pos: n, english: "heat"}
+      - {setswana: letsatsi, pos: n, english: "sun; day"}
+      - {setswana: phefô, pos: n, english: "wind"}
+      - {setswana: botoka, pos: a, english: "better"}
+      - {setswana: selemô, pos: n, english: "summer"}
+      - {setswana: mariga, pos: n, english: "winter"}
+
+  - lesson: 22
+    title: Health
+    words:
+      - {setswana: botlhoko, pos: n, english: "pain; painful"}
+      - {setswana: mala, pos: n, english: "stomach; intestines"}
+      - {setswana: leitlho, pos: n, english: "eye", plural: matlho}
+      - {setswana: leoto, pos: n, english: "leg; foot"}
+      - {setswana: ngaka, pos: n, english: "doctor"}
+
+  - lesson: 23
+    title: Safety
+    words:
+      - {setswana: nthuse, pos: phrase, english: "help me!"}
+      - {setswana: thuso, pos: n, english: "help"}
+      - {setswana: utswa, pos: v, english: "steal"}
+
+  # Not a lesson in the PDF. One to seven come from the number table in "There is no word for
+  # grammar in Setswana" (data/raw/peace_corps/); eight to ten were added by hand.
+  - lesson: null
+    title: Numbers
+    words:
+      - {setswana: nngwe, pos: n, english: "one"}
+      - {setswana: pedi, pos: a, english: "two"}
+      - {setswana: tharo, pos: a, english: "three"}
+      - {setswana: nne, pos: a, english: "four"}
+      - {setswana: tlhano, pos: a, english: "five"}
+      - {setswana: thataro, pos: a, english: "six"}
+      - {setswana: supa, pos: a, english: "seven"}
+      - {setswana: robedi, pos: a, english: "eight"}
+      - {setswana: robongwe, pos: a, english: "nine"}
+      - {setswana: lesome, pos: a, english: "ten"}

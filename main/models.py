@@ -19,6 +19,9 @@ class Lexeme(models.Model):
     rank = models.PositiveIntegerField(
         null=True, blank=True, db_index=True, help_text='Learning order; null = unscheduled.'
     )
+    curated_order = models.PositiveIntegerField(
+        null=True, blank=True, help_text='Position in the curated Peace Corps list; ranked first.'
+    )
     sources = models.JSONField(default=list, blank=True)
     notes = models.TextField(blank=True)
 

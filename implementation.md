@@ -14,7 +14,7 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 2. Orthography helpers + WordNet importer
 - [x] 3. Frequency + ranking
 - [x] 4. Brown dictionary importer
-- [ ] 5. Curated Peace Corps vocabulary
+- [x] 5. Curated Peace Corps vocabulary
 - [ ] 6. Scheduler core (learning model)
 - [ ] 7. Practice UI (single page, htmx)
 - [ ] 8. TTS v1
@@ -33,7 +33,7 @@ with its box ticked above. Logging follows the global rules: emoji prefix, no DE
 
 | Model | Fields | Notes |
 |---|---|---|
-| `Lexeme` | `setswana`, `english`, `pos`, `noun_class`, `plural`, `frequency`, `rank`, `sources` (JSON list), `notes` | Unique on (`setswana`, `pos`). `setswana` is in modern spelling. `rank` is the learning order (null = not scheduled). |
+| `Lexeme` | `setswana`, `english`, `pos`, `noun_class`, `plural`, `frequency`, `curated_order`, `rank`, `sources` (JSON list), `notes` | Unique on (`setswana`, `pos`). `setswana` is in modern spelling. `curated_order` is the position in the Peace Corps list (null = not curated). `rank` is the learning order (null = not scheduled). |
 | `Card` | `lexeme`, `direction`, `stage`, `consolidation_step`, `session_correct`, `due`, `stability`, `difficulty`, `reps`, `lapses`, `introduced_at` | One per (lexeme, direction). Directions: `en_to_tn` (see English, type Setswana) and `audio_to_tn` (hear TTS, type Setswana; enabled in step 8). Stages: `new`, `learning`, `consolidating`, `long_term`. |
 | `Review` | `card`, `typed`, `correct`, `rating`, `created_at` | One row per answer, used for accuracy, streaks and stats. |
 | `AudioClip` | `text`, `path`, `voice`, `created_at` | The TTS cache index; files live at `media/tts/<sha1>.wav`. |
@@ -50,8 +50,8 @@ each stage.
 | `import_wordnet` | `data/raw/sadilar/african_wordnet/.../wntsn-lmf.xml` + `data/raw/princeton_wordnet_2.0/WordNet-2.0/dict/data.*` | Each `LexicalEntry` lemma plus its synset id `ENG20-<offset>-<pos>` is looked up in the PWN data file; the first 1–3 synonyms become the English gloss. About 12k lemmas. |
 | `import_frequency` | `data/raw/sadilar/nchlt_text/tn/3.Lexica/FREQ.LEX.NCHLT.tn.txt` (`word<TAB>count`) | Sets `Lexeme.frequency`, matching lowercased words. Proper names (capitalised, or in `NELIST.NCHLT.all.txt`) are skipped. |
 | `import_brown` | `data/raw/archive_org/brown_1885_secwana_dictionary.txt` | Parses `Headword, pos., gloss` entries from the OCR, converts the old spelling to modern spelling (`main/orthography.py`), and merges into existing lexemes or creates new ones. |
-| `import_peace_corps` | `data/curated/peace_corps.yaml` (checked in) | Hand-curated survival vocabulary from Peace Corps lessons 1–23, marked for top rank. |
-| `build_ranking` | the DB | `rank` = curated Peace Corps words first, then descending `frequency` among lexemes with an English gloss. Grammatical particles (`go`, `le`, `ya`, `ka`, `mo`, …) get no rank, because they belong to the later sentence phase. Creates the `en_to_tn` cards for ranked lexemes. |
+| `import_peace_corps` | `data/curated/peace_corps.yaml` (checked in) | Hand-curated survival vocabulary from Peace Corps lessons 1–23 (plus numbers), matched on diacritic-free spelling. Sets `curated_order` and the curated gloss, which the other importers then leave alone. |
+| `build_ranking` | the DB | `rank` = curated Peace Corps words first (by `curated_order`), then descending `frequency` among the other lexemes with an English gloss, skipping spelling variants of curated words (`ntlô` when `ntlo` is curated). Grammatical particles (`go`, `le`, `ya`, `ka`, `mo`, …) get no rank, because they belong to the later sentence phase. Creates the `en_to_tn` cards for ranked lexemes. |
 
 ### Learning model: adaptive, no daily cap
 
@@ -159,6 +159,10 @@ compared after normalising case and whitespace, and accepted without the diacrit
   - `main/importers/peace_corps.py`, `import_peace_corps` command;
   - update `build_ranking` so these words come first.
 - **Done when:** the first ~150 ranks are the Peace Corps words, in lesson order.
+- **Result:** 268 curated words (verbs from lesson 5 make up 83 of them), ranks 1–268. Pipeline order:
+  `import_wordnet`, `import_brown`, `import_frequency`, `import_peace_corps`, `build_ranking`; any of them
+  can be re-run. Matched lexemes keep their existing spelling (e.g. `gakôlôla`), since other importers
+  match on it.
 
 ### 6. Scheduler core (learning model)
 - **Goal:** the adaptive model above, as pure, testable logic.

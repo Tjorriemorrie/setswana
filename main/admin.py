@@ -5,7 +5,7 @@ from main.models import AudioClip, Card, Lexeme, Review, Settings
 
 @admin.register(Lexeme)
 class LexemeAdmin(admin.ModelAdmin):
-    list_display = ('setswana', 'english', 'pos', 'noun_class', 'frequency', 'rank')
+    list_display = ('setswana', 'english', 'pos', 'noun_class', 'frequency', 'curated_order', 'rank')
     list_filter = ('pos', 'noun_class')
     search_fields = ('setswana', 'english', 'plural')
     ordering = ('rank', 'setswana')
