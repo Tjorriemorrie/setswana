@@ -12,3 +12,7 @@ reflects the user's current preferences.
 - Use `uv` for all Python and dependency management (`uv add`, `uv run`); never pip directly.
 - Python is pinned to the latest stable release (3.14) via `.python-version`.
 - Django project config lives in `config/`; application code goes in the `main` app.
+- Linting/formatting is ruff via pre-commit (`uv run pre-commit run --all-files`); rulesets are
+  configured in `pyproject.toml`. Code must pass the hooks before committing.
+- Logging goes to the console only (no file handlers), configured in `LOGGING` in
+  `config/settings.py`. Follow the global logging rules: emoji prefix, no DEBUG level.
