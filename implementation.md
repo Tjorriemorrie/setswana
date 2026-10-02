@@ -20,7 +20,7 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 8. TTS v1
 - [x] 9. Stats + settings panels
 - [x] 10. Accent improvement (research)
-- [ ] 11. Lighter TTS runtime (ONNX)
+- [x] 11. TTS on the GPU (PyTorch + CUDA)
 - [ ] Later, only on request: sentence-structure cards
 
 Every step ends with `uv run pre-commit run --all-files` and `uv run pytest` (coverage ≥ 90 %), and
@@ -273,11 +273,14 @@ compared after normalising case and whitespace, and accepted without the diacrit
     OpenSLR 32 or Lwazi II (needs a GPU training setup), and Meta MMS (it has no Setswana).
   - Practical consequence: use the audio as a rough guide, and trust the spelling over the voice.
 
-### 11. Lighter TTS runtime (ONNX)
-- **Goal:** the same Simba voice with far fewer dependencies.
-- **Work:** switch `main/tts.py` to the ONNX export `Hydramus/Simba-TTS-tsn-onnx` with `onnxruntime`;
-  `uv remove torch transformers`; keep the cache, the seed handling (if the export supports it) and the tests.
-- **Done when:** clips sound the same as before, and `torch`/`transformers` are gone from `pyproject.toml`.
+### 11. TTS on the GPU (PyTorch + CUDA)
+- **Goal:** keep PyTorch (it is also what any later fine-tuning of the voice needs) and run it on the GPU.
+- **Work:** `torch` comes from the `pytorch-cu132` index (`[tool.uv.sources]` in `pyproject.toml`; the driver
+  supports CUDA 13.x); `main/tts.py` loads the model on `cuda` when available and falls back to the CPU.
+- **Result:** the GPU makes generation faster but sounds the same as the CPU. The same seed draws different
+  noise on the GPU, so newly generated clips differ slightly from the CPU ones already cached.
+  An ONNX runtime (`Hydramus/Simba-TTS-tsn-onnx`, about 50 MB instead of about 570 MB) was considered
+  and declined.
 
 ### Later, only on request: sentence-structure cards
 Use the parallel sentences already downloaded (MAFAND, FLORES-200, Tatoeba) and the grammatical

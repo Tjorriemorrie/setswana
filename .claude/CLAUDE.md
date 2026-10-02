@@ -36,10 +36,11 @@ Always run both of these when you finish work, fix any failures, and report the 
 
 ## Preferences
 
-- **Keep it simple and small.** The app is a dictionary plus a voice that pronounces words. Don't add
-  heavy ML models, large downloads or research tooling (speech recognition, voice cloning, fine-tuning)
-  without asking first, and prefer the smallest dependency that does the job.
-
+- **Keep it simple.** The app is a dictionary plus a voice that pronounces words. Don't add extra ML
+  models, large downloads or research tooling (speech recognition, voice cloning, fine-tuning) without
+  asking first.
+- TTS stays on **PyTorch with CUDA** (`torch` from the `pytorch-cu132` uv index), for the best results and
+  to keep fine-tuning possible later; don't swap it for a lighter runtime.
 - Use `uv` for all Python and dependency management (`uv add`, `uv run`); never pip directly.
 - Python is pinned to **3.13 only** (`.python-version` and `requires-python`); do not use 3.14.
 - Django project config lives in `config/`; application code goes in the `main` app.

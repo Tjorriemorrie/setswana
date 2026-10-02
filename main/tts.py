@@ -28,13 +28,17 @@ def clip_path(text):
 
 @cache
 def load_model():
-    """Load the TTS model and tokenizer once per process."""
+    """Load the TTS model and tokenizer once per process, on the GPU when CUDA is available."""
+    import torch
     from transformers import AutoTokenizer, VitsModel
 
-    logger.info('🔊 Loading TTS model: model=%s', MODEL_ID)
-    model = VitsModel.from_pretrained(MODEL_ID)
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    logger.info('🔊 Loading TTS model: model=%s, device=%s', MODEL_ID, device)
+    model = VitsModel.from_pretrained(MODEL_ID).to(device)
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
-    logger.info('🔊 Loaded TTS model: model=%s, sampling_rate=%s', MODEL_ID, model.config.sampling_rate)
+    logger.info(
+        '🔊 Loaded TTS model: model=%s, device=%s, sampling_rate=%s', MODEL_ID, device, model.config.sampling_rate
+    )
     return model, tokenizer
 
 
@@ -49,11 +53,13 @@ def render(text):
     if inputs['input_ids'].shape[-1] == 0:
         logger.error('❌ Text has no characters the TTS model knows: text=%r, model=%s', text, MODEL_ID)
         raise ValueError(f'Nothing to synthesise in {text!r}')
-    torch.manual_seed(SEED)
+    torch.manual_seed(SEED)  # also seeds CUDA; GPU and CPU still draw different noise, so clips differ slightly
     with torch.no_grad():
-        waveform = model(**inputs).waveform
-    samples = waveform.squeeze().numpy()
-    logger.info('🔊 Rendered speech: text=%r, speakable=%r, samples=%s', text, speakable, len(samples))
+        waveform = model(**inputs.to(model.device)).waveform
+    samples = waveform.squeeze().cpu().numpy()
+    logger.info(
+        '🔊 Rendered speech: text=%r, speakable=%r, samples=%s, device=%s', text, speakable, len(samples), model.device
+    )
     return model.config.sampling_rate, samples
 
 
