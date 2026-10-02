@@ -19,7 +19,8 @@ in `data/raw/`, described in `data/SOURCES.md`.
 - [x] 7. Practice UI (single page, htmx)
 - [x] 8. TTS v1
 - [x] 9. Stats + settings panels
-- [ ] 10. Accent improvement (research)
+- [x] 10. Accent improvement (research)
+- [ ] 11. Lighter TTS runtime (ONNX)
 - [ ] Later, only on request: sentence-structure cards
 
 Every step ends with `uv run pre-commit run --all-files` and `uv run pytest` (coverage ≥ 90 %), and
@@ -258,6 +259,25 @@ compared after normalising case and whitespace, and accepted without the diacrit
   2. Write up the findings.
   3. Decide between a voice swap, fine-tuning on the NCHLT speech corpus, or keeping v1.
 - **Done when:** the decision is recorded here, plus a follow-up step if it's needed.
+- **Result: keep the Simba voice; no fine-tuning, no voice swap.** Simba is a poor speaker of
+  Setswana, but every way to improve it costs gigabytes of models and hours of compute, which doesn't
+  fit a small personal dictionary app. Findings (the comparison sheet is in `data/cache/accent/index.html`):
+  - Simba-TTS-tsn was fine-tuned from Meta's *Tsonga* voice on about 3 h of multi-speaker South African
+    Setswana (OpenSLR 32). Its own paper reports 90 % WER for Tswana, the worst of its seven languages.
+  - Of the 268 curated words, the Peace Corps audio had clips for 127. A Setswana Whisper model
+    (`misterkissi/whisper-small-setswana`) heard Simba's word roughly right for 11 of them; for the first
+    native clip it was 25. Whisper hallucinates a lot on one-word clips, so treat these numbers as rough.
+  - Tone: Simba's pitch shapes correlate 0.25 (median) with the native speakers', against 0.59 between two
+    native recordings of the same word. Simba can't know the tones, because the spelling doesn't mark them.
+  - Rejected: XTTS-v2 fine-tuned on Common Voice (5.6 GB, only about one epoch of training), fine-tuning on
+    OpenSLR 32 or Lwazi II (needs a GPU training setup), and Meta MMS (it has no Setswana).
+  - Practical consequence: use the audio as a rough guide, and trust the spelling over the voice.
+
+### 11. Lighter TTS runtime (ONNX)
+- **Goal:** the same Simba voice with far fewer dependencies.
+- **Work:** switch `main/tts.py` to the ONNX export `Hydramus/Simba-TTS-tsn-onnx` with `onnxruntime`;
+  `uv remove torch transformers`; keep the cache, the seed handling (if the export supports it) and the tests.
+- **Done when:** clips sound the same as before, and `torch`/`transformers` are gone from `pyproject.toml`.
 
 ### Later, only on request: sentence-structure cards
 Use the parallel sentences already downloaded (MAFAND, FLORES-200, Tatoeba) and the grammatical

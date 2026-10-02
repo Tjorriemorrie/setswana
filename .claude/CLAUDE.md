@@ -36,6 +36,10 @@ Always run both of these when you finish work, fix any failures, and report the 
 
 ## Preferences
 
+- **Keep it simple and small.** The app is a dictionary plus a voice that pronounces words. Don't add
+  heavy ML models, large downloads or research tooling (speech recognition, voice cloning, fine-tuning)
+  without asking first, and prefer the smallest dependency that does the job.
+
 - Use `uv` for all Python and dependency management (`uv add`, `uv run`); never pip directly.
 - Python is pinned to **3.13 only** (`.python-version` and `requires-python`); do not use 3.14.
 - Django project config lives in `config/`; application code goes in the `main` app.
